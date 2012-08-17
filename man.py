@@ -5,17 +5,18 @@ import tkFont
 
 class App:
     def __init__(self):
-        root = tk.Tk()
+        self.root = tk.Tk()
         # print root.winfo_toplevel()
-        self.text = tk.Text(root)
+        self.text = tk.Text(self.root)
         self.text.pack()
-        self.button = tk.Button(root, text="Get Selection", command=self.OnButton)
+        self.button = tk.Button(self.root, text="Get Selection", command=self.OnButton)
         self.button['text'] = 's'
         self.button.pack()
-        root.mainloop()
+        self.root.mainloop()
 
     def OnButton(self):
-        self.button['text'] += self.text.get("sel.first", "sel.last")
+        self.text['text'] += self.root.selection_get()
+        # self.text.get("sel.first", "sel.last")
         # print "selected text: '%s'" % self.text.get("sel.first", "sel.last")
 
 
