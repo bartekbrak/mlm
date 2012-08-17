@@ -5,16 +5,18 @@ from select import select
 
 import subprocess
 
+
+# config section
 DEBUG = False
 CUT_ENDINGS = True
 MIN_WORD_LENGTH = 3
 DISPLAY_RESULTS = 20
+DICS = ['csvs/file.csv', 'csvs/my.csv']
+DEV = InputDevice('/dev/input/event4')
 
 
 class App:
     def __init__(self):
-        self.dev = InputDevice('/dev/input/event4')
-        self.dics = ['file.csv', 'my.csv']
         self.oldwhat = 'init'
 
         self.root = Tk()
@@ -26,13 +28,12 @@ class App:
         self.text.tag_configure('linked', font='helvetica 8 italic', lmargin1=10, lmargin2=10, rmargin=10)
         self.text.tag_configure('message', font='helvetica 8 italic', background='yellow')
         self.text.tag_configure('definitions', font='helvetica 10', lmargin1=10, lmargin2=10, rmargin=10)
-        # self.master = master
         self.lop()
         self.root.mainloop()
 
     def lop(self):
-        r, w, x = select([self.dev], [], [])
-        for event in self.dev.read():
+        r, w, x = select([DEV], [], [])
+        for event in DEV.read():
             if event.type == ecodes.EV_KEY and event.code == 272 and event.value == 00:
                 try:
                     what = self.root.selection_get().strip()
@@ -46,7 +47,7 @@ class App:
                     try:
                         # the grep reads anything that matches but in first or second pairs of quotes, don't give me english
                         # ignore case and suppress filenames
-                        grep_output = subprocess.check_output(["grep", "-hi", "\".*%s.*\"[^\"]*\"" % what] + self.dics)
+                        grep_output = subprocess.check_output(["grep", "-hi", "\".*%s.*\"[^\"]*\"" % what] + DICS)
                     except subprocess.CalledProcessError:
                         self.text.insert("1.0", " %s - nothing found" % what, 'message')
                         break
@@ -58,8 +59,6 @@ class App:
                             if DEBUG:
                                 self.text.insert("1.0", "%s\n" % grep[1], 'linked')
                             self.text.insert("1.0", "%s\n" % grep[0], 'head')
-                # except:
-                    # pass
         self.root.after(100, self.lop)
 
 app = App()

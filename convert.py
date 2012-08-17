@@ -1,14 +1,20 @@
 #!/usr/bin/env python
+import sys
+
+print sys.argv
+if len(sys.argv) != 3:
+    print "usage: %s from_wiktionary.dic conjugation.tsv" % sys.argv[0]
+    sys.exit()
 
 mydic = {}
 mydic2 = {}
-for line in open('es-conjugation-utf8-1.3.1.tsv'):
+for line in open(sys.argv[2]):
     linelist = line.rstrip('\n').split('\t')
     root = linelist[0]
     derivatives = ', '.join(linelist[1:])
     mydic2[root] = derivatives
 
-for line in open('es-en.dic'):
+for line in open(sys.argv[1]):
     a, b = line.rstrip('\n').split('::')
     a = a.strip()
     b = b.strip()

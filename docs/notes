@@ -1,0 +1,15 @@
+shell commands:
+    ./convert.py | grep "{v}" | grep -v "\"\"" | wc -l  # how many with derivatives
+    ./convert.py | grep "{v} " | grep "\"\""  # check what verbs found no derivatives
+    ./convert.py | g "{v}" | wc -l  # how many verbs
+    grep -o "{.*}" es-en.dic | sort| uniq  # show tags
+
+
+copyrights and attributions:
+    https://sites.google.com/site/milesdlh/conjugation
+
+useful resources:
+    http://www.tkdocs.com/tutorial/text.html
+
+sanitization:
+    remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n
