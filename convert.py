@@ -1,17 +1,22 @@
 #!/usr/bin/env python
 import sys
+from time import gmtime, strftime
 
-print sys.argv
 if len(sys.argv) != 3:
     print "usage: %s from_wiktionary.dic conjugation.tsv" % sys.argv[0]
     sys.exit()
+
+now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+print "000_description\t\tfrom %s %s on %s" % (sys.argv[1], sys.argv[1], now)
 
 mydic = {}
 mydic2 = {}
 for line in open(sys.argv[2]):
     linelist = line.rstrip('\n').split('\t')
     root = linelist[0]
-    derivatives = ', '.join(linelist[1:])
+    # csv
+    #derivatives = ', '.join(linelist[1:])
+    derivatives = '\t'.join(linelist[1:])
     mydic2[root] = derivatives
 
 for line in open(sys.argv[1]):
@@ -19,7 +24,7 @@ for line in open(sys.argv[1]):
     a = a.strip()
     b = b.strip()
     if a in mydic:
-        mydic[a] = mydic[a] + '\\n' + b.strip()
+        mydic[a] = mydic[a] + '; ' + b.strip()
     else:
         mydic[a] = b.strip()
 
@@ -29,4 +34,6 @@ for line in mydic.keys():
         derivatives = mydic2[root]
     else:
         derivatives = ''
-    print '"%s";"%s";"%s"' % (line, derivatives, mydic[line])
+    # csv
+    # print '"%s";"%s";"%s"' % (line, derivatives, mydic[line])
+    print "%s\t%s\t%s" % (line, derivatives, mydic[line])

@@ -3,16 +3,32 @@ from Tkinter import *
 from evdev import InputDevice, ecodes
 from select import select
 
+import codecs
 import subprocess
-
+import re
 
 # config section
-DEBUG = False
-CUT_ENDINGS = True
+D = DEBUG = True
+CUT_ENDINGS = False
 MIN_WORD_LENGTH = 3
-DISPLAY_RESULTS = 20
-DICS = ['csvs/file.csv', 'csvs/my.csv']
-DEV = InputDevice('/dev/input/event4')
+MAX_WORD_LENGTH = 20
+DISPLAY_RESULTS = 40
+DICS = [
+    '/home/bartek/workspace/mlm/dics/wiktionary.tsv',
+    '/home/bartek/workspace/mlm/dics/my.tsv'
+ ]
+DEV = InputDevice('/dev/input/by-path/pci-0000:00:1a.1-usb-0:2:1.0-event-mouse')
+
+
+# http://casa.colorado.edu/~ginsbura/pygrep.htm
+def grepf(string, list):
+    expr = re.compile(string, flags=re.U | re.I)
+    return filter(expr.search, list)
+
+lines = []
+for filename in DICS:
+    f = codecs.open(filename, 'r', 'utf-8')
+    lines += f.readlines()
 
 
 class App:
@@ -21,6 +37,7 @@ class App:
 
         self.root = Tk()
         self.root.wm_title("mlm")
+        self.root.geometry("286x1050+1394+0")
 
         self.text = Text(self.root, width=40, height=80)
         self.text.pack()
@@ -37,28 +54,37 @@ class App:
             if event.type == ecodes.EV_KEY and event.code == 272 and event.value == 00:
                 try:
                     what = self.root.selection_get().strip()
+                    if D:
+                        print 'what', what, len(what), type(what)
+                    if not MIN_WORD_LENGTH < len(what) < MAX_WORD_LENGTH:
+                        break
                     if CUT_ENDINGS:
                         what = what[:-1]  # what a silly rule
                 except:
-                    what = ''
+                    if D:
+                        print 'either selection was too short or nothing was selected'
+                    break
                 if self.oldwhat != what:
                     self.oldwhat = what
                     self.text.delete("1.0", END)
-                    try:
-                        # the grep reads anything that matches but in first or second pairs of quotes, don't give me english
-                        # ignore case and suppress filenames
-                        grep_output = subprocess.check_output(["grep", "-hi", "\".*%s.*\"[^\"]*\"" % what] + DICS)
-                    except subprocess.CalledProcessError:
-                        self.text.insert("1.0", " %s - nothing found" % what, 'message')
-                        break
-                    grep_output = grep_output.rstrip("\n").split("\n")
-                    for grep in grep_output[:DISPLAY_RESULTS]:
-                        grep = grep.replace("\"", "").split(';')
-                        if len(what) + int(CUT_ENDINGS) >= MIN_WORD_LENGTH:
-                            self.text.insert("1.0", "%s\n\n" % grep[2].replace("\\n", "\n"), 'definitions')
-                            if DEBUG:
-                                self.text.insert("1.0", "%s\n" % grep[1], 'linked')
-                            self.text.insert("1.0", "%s\n" % grep[0], 'head')
+                    grep_output = list(set(grepf('^%s' % what, lines) + grepf('\s%s' % what, lines)))
+                    if D:
+                        print 'found', len(grep_output), 'matches'
+                        print 'grep_output', grep_output
+                    for grep in reversed(grep_output[:DISPLAY_RESULTS]):
+                        head, the_rest = grep.split('\t', 1)
+                        derivatives, definition = the_rest.rsplit('\t', 1)
+                        if D:
+                            print grep
+                        self.text.insert("1.0", "%s\n" % definition.replace('; ', '\n'), 'definitions')
+                        if D:
+                            self.text.insert("1.0", "%s\n" % derivatives, 'linked')
+                        self.text.insert("1.0", "%s\n" % head, 'head')
+                        self.root.lift()
+                else:
+                    if D:
+                        print "same selection"
+
         self.root.after(100, self.lop)
 
 app = App()

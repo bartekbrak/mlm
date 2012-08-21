@@ -17,5 +17,5 @@ WIKIPATH=User:Matthias_Buchmeier/$iso-$iso2
 for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z 0
 do
 lynx -width=1000 -nolist -underscore -dump -assume_charset=utf-8 -display_charset=utf-8 "http://en.wiktionary.org/w/index.php?title=$WIKIPATH-$letter&printable=yes" |\
-awk '/::/ {gsub(/[\ ]+/, " "); gsub(/^[\ ]/, ""); print;}' | sed -e "s,; ,\\\n,g" -e "s,\",\',g" | grep -v "^#"
+awk '/::/ {gsub(/[\ ]+/, " "); gsub(/^[\ ]/, ""); print;}' | sed -e "s,\",\',g" | grep -v "^#"
 done

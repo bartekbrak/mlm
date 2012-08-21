@@ -13,3 +13,18 @@ useful resources:
 
 sanitization:
     remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n
+
+def grep(string,list):
+    expr = re.compile(string)
+    for text in list:
+        match = expr.search(text)
+        if match != None:
+            return match.string
+
+def grep2(string,list):
+    expr = re.compile(string)
+    return [elem for elem in list if expr.match(elem)]
+
+def grep3(string,list):
+    expr = re.compile(string)
+    return filter(expr.search,list)
