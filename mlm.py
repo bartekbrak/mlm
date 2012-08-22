@@ -14,7 +14,7 @@ MIN_WORD_LENGTH = 3
 MAX_WORD_LENGTH = 20
 DISPLAY_RESULTS = 40
 DICS = [
-    '/home/bartek/workspace/mlm/dics/wiktionary.tsv',
+    '/home/bartek/workspace/mlm/dics/wiktionary_en_es.tsv',
     '/home/bartek/workspace/mlm/dics/my.tsv'
  ]
 DEV = InputDevice('/dev/input/by-path/pci-0000:00:1a.1-usb-0:2:1.0-event-mouse')
@@ -67,7 +67,8 @@ class App:
                 if self.oldwhat != what:
                     self.oldwhat = what
                     self.text.delete("1.0", END)
-                    grep_output = list(set(grepf('^%s' % what, lines) + grepf('\s%s' % what, lines)))
+                    # probably this could be rewritten, one call and sort
+                    grep_output = grepf('^%s\s' % what, lines) + grepf('^%s[^\s]' % what, lines) + grepf('\s%s\s' % what, lines) + grepf('\s%s[^\s]' % what, lines)
                     if D:
                         print 'found', len(grep_output), 'matches'
                         print 'grep_output', grep_output
