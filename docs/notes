@@ -3,6 +3,7 @@ shell commands:
     ./convert.py | grep "{v} " | grep "\"\""  # check what verbs found no derivatives
     ./convert.py | g "{v}" | wc -l  # how many verbs
     grep -o "{.*}" es-en.dic | sort| uniq  # show tags
+    sdiff -s -w 210 dics/wiktionary.tsv dics/wiktionary_2012-08-22.tsv
 
 
 copyrights and attributions:
