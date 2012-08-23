@@ -13,10 +13,18 @@ print "000_description\t\tfrom %s %s on %s" % (sys.argv[1], sys.argv[1], now)
 # conjugation
 derivatives_dictionary = {}
 for line in open(sys.argv[2]):
-    # some verbs have their variants, marked as such: ser/*seer, we don't want these and treat ruler as a derivative
-    linelist = line.rstrip('\n').replace('/*', '\t').split('\t')
-    root = linelist[0]
-    derivatives = '\t'.join(linelist[1:])
+    # strip unimportant
+    replacements = {
+        '/*': '\t',   # variants
+        '-\t': '',    # blank entries
+        '[AmL]': '',  # regional variant
+        '[Esp]': '',  # regional variant
+        '/': '\t'     # variants
+    }
+    line = reduce(lambda a, (b, c): a.replace(b, c), replacements.items(), line)
+    line_as_list = line.rstrip('\n').split('\t')
+    root = line_as_list[0]
+    derivatives = '\t'.join(line_as_list[1:])
     derivatives_dictionary[root] = derivatives
 
 wiktionary = {}
