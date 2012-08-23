@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from Tkinter import *
-from evdev import InputDevice, ecodes
+from evdev import InputDevice, ecodes, event_factory
 from select import select
 
 import codecs
@@ -9,7 +9,7 @@ import re
 
 # config section
 D = DEBUG = True
-CUT_ENDINGS = False
+CUT_ENDINGS = True
 MIN_WORD_LENGTH = 3
 MAX_WORD_LENGTH = 20
 DISPLAY_RESULTS = 40
@@ -25,10 +25,18 @@ def grepf(string, list):
     expr = re.compile(string, flags=re.U | re.I)
     return filter(expr.search, list)
 
+
 lines = []
 for filename in DICS:
     f = codecs.open(filename, 'r', 'utf-8')
     lines += f.readlines()
+
+
+class SynEvent(object):
+    def __init__(self, event):
+        print 'zorro'
+
+event_factory[ecodes.EV_KEY] = SynEvent
 
 
 class App:
@@ -58,8 +66,6 @@ class App:
                         print 'what', what, len(what), type(what)
                     if not MIN_WORD_LENGTH < len(what) < MAX_WORD_LENGTH:
                         break
-                    if CUT_ENDINGS:
-                        what = what[:-1]  # what a silly rule
                 except:
                     if D:
                         print 'either selection was too short or nothing was selected'
@@ -67,25 +73,46 @@ class App:
                 if self.oldwhat != what:
                     self.oldwhat = what
                     self.text.delete("1.0", END)
+                    if CUT_ENDINGS:
+                        what = self.strip_plural_endings(what)
+                    if D:
+                        inter = ['m:next group']
+                    else:
+                        inter = []
                     # probably this could be rewritten, one call and sort
-                    grep_output = grepf('^%s\s' % what, lines) + grepf('^%s[^\s]' % what, lines) + grepf('\s%s\s' % what, lines) + grepf('\s%s[^\s]' % what, lines)
+                    grep_output = grepf('^%s\s' % what, lines) + \
+                                  inter + \
+                                  grepf('^%s[^\s]' % what, lines) + \
+                                  inter + \
+                                  grepf('\s(?<!^)%s\s' % what, lines) + \
+                                  inter + \
+                                  grepf('\s(?<!^)%s[^\s]' % what, lines)
                     if D:
                         print 'found', len(grep_output), 'matches'
                         print 'grep_output', grep_output
                     for grep in reversed(grep_output[:DISPLAY_RESULTS]):
-                        head, the_rest = grep.split('\t', 1)
-                        derivatives, definition = the_rest.rsplit('\t', 1)
-                        if D:
-                            print grep
-                        self.text.insert("1.0", "%s\n" % definition.replace('; ', '\n'), 'definitions')
-                        if D:
-                            self.text.insert("1.0", "%s\n" % derivatives, 'linked')
-                        self.text.insert("1.0", "%s\n" % head, 'head')
-                        self.root.lift()
+                        if not 'm:' in grep:
+                            head, the_rest = grep.split('\t', 1)
+                            derivatives, definition = the_rest.rsplit('\t', 1)
+                            if D:
+                                print grep
+                            self.text.insert("1.0", "%s\n" % definition.replace('; ', '\n'), 'definitions')
+                            if D:
+                                self.text.insert("1.0", "%s\n" % derivatives, 'linked')
+                            self.text.insert("1.0", "%s\n" % head, 'head')
+
+                        else:
+                            self.text.insert("1.0", "%s\n" % grep[2:], 'message')
+                    self.root.lift()
                 else:
                     if D:
                         print "same selection"
 
         self.root.after(100, self.lop)
+
+    def strip_plural_endings(self, string):
+        expr = re.compile('[e]{0,}s$', flags=re.U | re.I)
+        return expr.sub('', string)
+
 
 app = App()
