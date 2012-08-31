@@ -11,6 +11,9 @@ copyrights and attributions:
 
 useful resources:
     http://www.tkdocs.com/tutorial/text.html
+    http://gskinner.com/RegExr/
+    http://www.mobipocket.com/dev/article.asp?basefolder=prcgen&file=indexing.htm
+    http://www.klokan.cz/projects/stardict-lingea/
 
 sanitization:
     remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n
@@ -29,3 +32,16 @@ def grep2(string,list):
 def grep3(string,list):
     expr = re.compile(string)
     return filter(expr.search,list)
+
+regexs:
+    [^\t\wáíéóüú ]
+
+some note
+    <idx:orth>record
+      <idx:infl>
+        <idx:iform value="records" />
+      </idx:infl>
+    </idx:orth>
+
+consider:
+    apoyado apoyada
