@@ -15,11 +15,11 @@ derivatives_dictionary = {}
 for line in open(sys.argv[2]):
     # strip unimportant
     replacements = {
-        '/*': '\t',   # variants
-        '-\t': '',    # blank entries
+        '/*': ' ',   # variants
+        '-': '',    # blank entries
         '[AmL]': '',  # regional variant
         '[Esp]': '',  # regional variant
-        '/': '\t'     # variants
+        '/': ' '     # variants
     }
     line = reduce(lambda a, (b, c): a.replace(b, c), replacements.items(), line)
     line_as_list = line.rstrip('\n').split('\t')
