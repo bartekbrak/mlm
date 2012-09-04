@@ -374,6 +374,7 @@ $0 ~ exclude_defn {next;}
                         pos3=( pos gend );
                         pos3=( pos3 gend2 );
                         pos3=gensub(/(n)([mfncps])/, "\\2", "1", pos3);
+                        print title, pos3
 
                         LHS = sprintf("[[%s]] {%s}",title,pos3);
 
