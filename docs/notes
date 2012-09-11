@@ -4,6 +4,7 @@ shell commands:
     ./convert.py | g "{v}" | wc -l  # how many verbs
     grep -o "{.*}" es-en.dic | sort| uniq  # show tags
     sdiff -s -w 210 dics/wiktionary.tsv dics/wiktionary_2012-08-22.tsv
+    cat dumps/enwiktionary-20120821-pages-articles.xml | gawk -v REMOVE_WIKILINKS=y -v REMOVE_CONTEXT=n -v REMOVE_SPACED=y --re-interval -v LANG=Spanish -f trans-FL-en.awk > es-en-2012-09-05.dic
 
 
 copyrights and attributions:
@@ -14,6 +15,7 @@ useful resources:
     http://gskinner.com/RegExr/
     http://www.mobipocket.com/dev/article.asp?basefolder=prcgen&file=indexing.htm
     http://www.klokan.cz/projects/stardict-lingea/
+    http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
 
 sanitization:
     remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n

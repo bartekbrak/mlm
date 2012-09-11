@@ -16,7 +16,7 @@ for line in open(sys.argv[2]):
     # strip unimportant
     replacements = {
         '/*': ' ',   # variants
-        '-': '',    # blank entries
+        # '-': '',    # blank entries
         '[AmL]': '',  # regional variant
         '[Esp]': '',  # regional variant
         '/': ' '     # variants

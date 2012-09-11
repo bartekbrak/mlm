@@ -118,12 +118,13 @@ pos= "";
 gend="";
 # variable holding page title
 title = "";
-#
 # language dependent regular expressions
 #
 # command-line options
 #
 if(REMOVE_WIKILINKS == "y") remove_wikilinks = 1;
+if(REMOVE_CONTEXT == "y") remove_context = 1;
+if(REMOVE_SPACED == "y") remove_spaced = 1;
 #
 # regexp matching language section header
 langhead="\\x3D\\x3D[\\x20]*"lang"[\\x20]*\\x3D\\x3D";
@@ -134,7 +135,7 @@ warnmissing="[[][[]Category:"lang" (nouns|adjectives|verbs)[]][]]";
 }
 
 function printout(outp) {
-
+                        #print "przed", outp
 # convert special xml formating like &lt; to html
                         gsub(/&lt;/,"<",outp);
                         gsub(/&gt;/,">",outp);
@@ -163,7 +164,17 @@ if(remove_wikilinks==1) {
                         outp = gensub(/([[][[])([^]]*)([]][]])/ , "\\2", "g", outp);
                         gsub(/[']{2,}/, "", outp);
                         }
+if(remove_context==1)   {
+                        gsub(/\{\{.*\}\} /, "", outp);
+                        }
+# {{}} --> {}
+                        gsub(/\{\{/, "{", outp);
+                        gsub(/\}\}/, "}", outp);
+                        gsub(/\|/, ",", outp);
 
+if (remove_spaced==1)   {
+                        if(match(outp, "^.* .*\t") !=0) next;
+                        }
                         print outp;
 }
 
@@ -237,7 +248,7 @@ next;}
 # Usage notes dont contain definitions, skip
 /\x3D\x3D\x3D[\x20]*Usage notes[\x20]*\x3D\x3D\x3D/ { pos="-"; next;}
 
-# These are supposed to be examples: ommit
+# These are supposed to be examples: ommit BR:might be useful
 /\x23\:|\x23\x23|\x23\*/ {next;}
 
 # convert old {{infl| head line template call to new {{head| replacement
@@ -374,7 +385,6 @@ $0 ~ exclude_defn {next;}
                         pos3=( pos gend );
                         pos3=( pos3 gend2 );
                         pos3=gensub(/(n)([mfncps])/, "\\2", "1", pos3);
-                        print title, pos3
 
                         LHS = sprintf("[[%s]] {%s}",title,pos3);
 
@@ -393,19 +403,21 @@ $0 ~ exclude_defn {next;}
                         gsub(/\[\|/,"[",$0);
 
                         outp = LHS" :: "$0;
+                        outp = sprintf("%s\t%s\t%s",title,pos3, $0);
+
 
 # change :: {{...}} -> [...] ::
 # templates at beginning of definition-lines are supposed to be context
-                        old=outp;
-                        for(i=0;i<10;i++)
-                        {
+                        #old=outp;
+                        #for(i=0;i<10;i++)
+                        #{
 # move contexts to LHS
-                        if(match(old, /::[\x20]*\{\{(gloss|sense)[\|]/) != 0) break;
-#                       if(match(old, /::[\x20]*\{\{[^\}\|]*of[\|\}]/) != 0) break;
-                        outp=gensub(/(.*)([\x20]::[\x20])([\x20]*\{\{)([^\}]*)(\}\})(.*)/, "\\1 [\\4] \\2\\6", "g", old);
-                        if(outp==old) break;
-                        old=outp;
-                        }
+                        #if(match(old, /::[\x20]*\{\{(gloss|sense)[\|]/) != 0) break;
+#                       #if(match(old, /::[\x20]*\{\{[^\}\|]*of[\|\}]/) != 0) break;
+                        #outp=gensub(/(.*)([\x20]::[\x20])([\x20]*\{\{)([^\}]*)(\}\})(.*)/, "\\1 [\\4] \\2\\6", "g", old);
+                        #if(outp==old) break;
+                        #old=outp;
+                        #}
 
 # change [ | | ] -> [ , , ]
                         old=outp;
@@ -427,7 +439,7 @@ $0 ~ exclude_defn {next;}
                         outp=gensub(/(\[\[[^\|\]]*[^ ])([ ]*[#][^\|\]]*)(\|[^\]]*\]\])/, "\\1\\3", "g", outp);
 
                         printout(outp);
-                        if (pos == "") print "#UNKNOWN POS on page ",title ;
+                        #if (pos == "") print "#UNKNOWN POS on page ",title ; # unnecessary info?
                         }
                         }
 
