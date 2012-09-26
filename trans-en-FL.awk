@@ -489,17 +489,17 @@ $0 ~ exclude {next;}
 #$0 ~ transline {
 {if(trans==0) next;}
 /^[*]/ {
-#print "transline:"$0";trans="trans";nestsect="nestsect;
+# print "transline:"$0";trans="trans";nestsect="nestsect;
         if((trans==1)&&(nestsect==1)) {
 
 # set LHS
                 LHS = sprintf("[[%s]] ", title);
-                if(pos != "") LHS = (LHS sprintf("{%s} ", pos));
-                if(enable_ipa==1) {
-                        if(ipa1!="") { LHS = (LHS sprintf("/%s/ ", ipa1)); ipa1=""; ipa2="";}
-                        if(ipa2!="") { LHS = (LHS sprintf("/%s/ ", ipa2)); ipa1=""; ipa2="";}
-                        }
-                if (gloss != "") LHS = (LHS sprintf("(%s) ", gloss));
+                # if(pos != "") LHS = (LHS sprintf("{%s} ", pos));
+                # if(enable_ipa==1) {
+                #         if(ipa1!="") { LHS = (LHS sprintf("/%s/ ", ipa1)); ipa1=""; ipa2="";}
+                #         if(ipa2!="") { LHS = (LHS sprintf("/%s/ ", ipa2)); ipa1=""; ipa2="";}
+                #         }
+                # if (gloss != "") LHS = (LHS sprintf("(%s) ", gloss));
 
 # conversion of obsolete/redirected/equivalent templates
 #
@@ -649,6 +649,14 @@ if((iso=="de")||(iso=="es")||(iso=="fr")||(iso=="it")||(iso=="pt")) {
 # convert {{gloss|...}},  {{sense|...}} -> (...)
                         TR=gensub(/(\{\{(gloss|sense)\|)([^}]*)(\}\})/, "(\\3)", "g", TR);
 
+# bartek
+                        # if (gloss != "") TR = (sprintf("(%s) ", gloss) TR);
+                        TR=gensub(/(\{)([mfncsp])(\})/, "", "g", TR);
+                        if(enable_ipa==1) {
+                                if(ipa1!="") { TR = (sprintf("/%s/ ", ipa1) TR); ipa1=""; ipa2="";}
+                                if(ipa2!="") { TR = (sprintf("/%s/ ", ipa2) TR); ipa1=""; ipa2="";}
+                                }
+                        if(pos != "") TR = (sprintf("{%s} ", pos) TR);
 # remove <\/text>, (might be there at the end of page (XML-code)
                         gsub(/<\/text>/,"",TR);
 
