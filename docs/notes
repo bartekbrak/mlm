@@ -16,6 +16,7 @@ useful resources:
     http://www.mobipocket.com/dev/article.asp?basefolder=prcgen&file=indexing.htm
     http://www.klokan.cz/projects/stardict-lingea/
     http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
+    http://en.wiktionary.org/wiki/User:Matthias_Buchmeier/trans-en-es.awk
 
 sanitization:
     remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n
@@ -47,3 +48,6 @@ some note
 
 consider:
     apoyado apoyada
+
+Latin:
+    http://www.codeproject.com/Articles/72737/Latin-Textbook-and-Look-up-Table-in-C

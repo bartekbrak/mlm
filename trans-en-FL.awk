@@ -673,7 +673,7 @@ if(TR != "") {if(oldRHS != "") oldRHS = oldRHS"; "TR;
 }
 
 if(LHS != oldLHS) {
-if(oldRHS != "")  {outp = (oldLHS sprintf("\t%s",oldRHS));
+if(oldRHS != "")  {outp = (oldLHS sprintf("\t\t%s",oldRHS));
                         printout(outp);}
 oldLHS = LHS;
 oldRHS = TR;

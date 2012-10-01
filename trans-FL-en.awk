@@ -1,4 +1,4 @@
-# gawk script to create a Foreign_Language-English dictionary from
+// # gawk script to create a Foreign_Language-English dictionary from
 # the Foreign_Language sections of en.wiktionary.org
 #
 # (c) 2011-2012 by Matthias Buchmeier
@@ -389,7 +389,7 @@ $0 ~ exclude_defn {next;}
                         LHS = sprintf("[[%s]] {%s}",title,pos3);
 
                         gsub(/^[\x20]*\x23[\x20]*/,"",$0);
-                        gsub(/<\/text>/,"",$0);
+                        gsub(/<\/text>/`,"",$0);
                         gsub(/\.$/,"",$0);
                         regexp="\\|lang\\="iso;
                         gsub(regexp,"",$0);
