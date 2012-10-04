@@ -1,3 +1,5 @@
+# bzcat enwiktionary-DATE-pages-articles.xml.bz2|gawk -v LANG=language -v ISO=iso-code -f trans-en-es.awk|sort -d -k 1,1 -t"{">en-xx.wiki
+#
 #  gawk script to extract translations from the database dump of en.wiktionary.org
 #
 # (c) 2011-2012 by Matthias Buchmeier
