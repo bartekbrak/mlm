@@ -2,44 +2,45 @@
 
 from collections import OrderedDict
 
+
 def es_conj(args):
-	r = result = OrderedDict()
+    r = result = OrderedDict()
 
-	# use subjunctive present forms if no negative provided
-	if len(args) == 62:
-		for x in range(34,39):
-			args.append('no '+args[x])
+    # use subjunctive present forms if no negative provided
+    if len(args) == 62:
+        for x in range(34, 39):
+            args.append('no ' + args[x])
 
-	grammar = [
-	 {'indicative':['present','imperfect','preterite','future', 'conditional']},
-	 {'subjunctive':['present', 'imperfect_ra', 'imperfect_se', 'future']},
-	 {'imperative':['affirmative', 'negative']}
-	 ]
-	skip = ['1_imperative_affirmative','1_imperative_negative']
+    grammar = [
+     {'indicative':['present', 'imperfect', 'preterite', 'future', 'conditional']},
+     {'subjunctive':['present', 'imperfect_ra', 'imperfect_se', 'future']},
+     {'imperative':['affirmative', 'negative']}
+     ]
+    skip = ['1_imperative_affirmative', '1_imperative_negative']
 
-	r['infinitive'] = args[0]
-	r['gerund'] = args[1]
-	r['past_participle'] = args[2]
+    r['infinitive'] = args[0]
+    r['gerund'] = args[1]
+    r['past_participle'] = args[2]
 
+    x = 3
+    for mood_dic in grammar:
+        mood = mood_dic.keys()[0]
+        tenses = mood_dic[mood]
+        # from ipdb import set_trace; set_trace()
+        for tense in tenses:
+            for person in range(1, 7):
+                lhs = "%s_%s_%s" % (person, mood, tense)
+                if lhs not in skip:
+                    r[lhs] = args[x]
+                    x += 1
+    print r
+    return r
 
-	x=3
-	for mood_dic in grammar:
-		mood = mood_dic.keys()[0]
-		tenses = mood_dic[mood]
-		# from ipdb import set_trace; set_trace() 
-		for tense in tenses:
-			for person in range(1,7):
-				lhs = "%s_%s_%s" % (person, mood, tense)
-				if lhs not in skip:
-					r[lhs] = args[x]
-					x = x+1
-	print r
-	return r
 
 def es_conj_ar_andar(stem, ref_stem=None):
     # To use with a reflexive verb add ''ref_stem=accented form of verb stem'' to the template call.
     if ref_stem:
-    	s= """{stem}arse
+        s = """{stem}arse
 {stem}ándose
 {stem}ado
 me {stem}o
@@ -109,9 +110,9 @@ se {stem}uvieren
 {ref_stem}ese
 {stem}émonos
 {stem}aos
-{ref_stem}ense""".replace('\n\n','').format(stem=stem, ref_stem=ref_stem)
+{ref_stem}ense""".replace('\n\n', '\n').format(stem=stem, ref_stem=ref_stem)
     else:
-		s="""{stem}ar
+        s = """{stem}ar
 {stem}ando
 {stem}ado
 
@@ -182,13 +183,13 @@ se {stem}uvieren
 {stem}e
 {stem}emos
 {stem}ad
-{stem}en""".replace('\n\n','\n').format(stem=stem, ref_stem=ref_stem)
+{stem}en""".replace('\n\n', '\n').format(stem=stem, ref_stem=ref_stem)
 
     # call= [
 
     # ]
     # print len(tuple(s.split("\n")))
-    t=s.split("\n")
+    t = s.split("\n")
     es_conj(t)
 
 es_conj_ar_andar('and')
