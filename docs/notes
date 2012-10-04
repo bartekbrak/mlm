@@ -17,6 +17,8 @@ useful resources:
     http://www.klokan.cz/projects/stardict-lingea/
     http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string
     http://en.wiktionary.org/wiki/User:Matthias_Buchmeier/trans-en-es.awk
+    http://en.wiktionary.org/wiki/Wiktionary:Spanish_verb_inflection-table_templates
+    http://www.mediawiki.org/wiki/Manual:Parameters_to_index.php
 
 sanitization:
     remove " and ;s from es-en.dic, sounds reasonable to go ;=>\n
@@ -51,3 +53,11 @@ consider:
 
 Latin:
     http://www.codeproject.com/Articles/72737/Latin-Textbook-and-Look-up-Table-in-C
+
+mywiki:
+    http://www.mediawiki.org/wiki/Manual:Installing_MediaWiki#Run_the_installation_script
+
+java:
+    https://github.com/newca12/dictionary-builder
+
+?action=raw&templates=expand
