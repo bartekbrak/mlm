@@ -1,11 +1,12 @@
 # cat enwiktionary-20120821-pages-articles.xml | gawk -f verbs.awk
-# wylistuje templatey, wlczayc do wiekszego skryptu
+# lists used templates
 BEGIN {
-    lang="German";
+    lang="Spanish";
     langhead="\\x3D\\x3D[\\x20]*"lang"[\\x20]*\\x3D\\x3D";
     flush="";
-    code="de"
-    verbhead="\\{\\{"code"-";
+    code="es"
+    #verbhead="\\{\\{"code"-conjline";
+    verbhead="\\{\\{es-conjline";
 }
 /\x3Ctitle/ {
     #print flush
