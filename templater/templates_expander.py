@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from collections import OrderedDict
+from templates import templates
+
+
+def template_string_to_list(template_string, *args, **kwargs):
+    """ formats template string ready for last template processor"""
+    return template_string.replace('\n\n', '\n').format(*args, **kwargs).split('\n')
 
 
 def es_conj(args):
@@ -24,7 +30,7 @@ def es_conj(args):
 
     x = 3
     for mood_dic in grammar:
-        mood = mood_dic.keys()[0]
+        mood = list(mood_dic.keys())[0]
         tenses = mood_dic[mood]
         # from ipdb import set_trace; set_trace()
         for tense in tenses:
@@ -33,163 +39,40 @@ def es_conj(args):
                 if lhs not in skip:
                     r[lhs] = args[x]
                     x += 1
-    print r
     return r
 
 
+def es_conj_ar_errar(stem):
+    """'e' becomes 'ye' in stressed syllables, except in Latin America, where it is conjugated normally."""
+    template = templates['es_conj_ar_errar']
+    return es_conj(template_string_to_list(template, stem=stem,))
+
+
 def es_conj_ar_andar(stem, ref_stem=None):
-    # To use with a reflexive verb add ''ref_stem=accented form of verb stem'' to the template call.
+    # To use with a reflexive verb add ref_stem='accented form of verb stem' to the template call.
     if ref_stem:
-        s = """{stem}arse
-{stem}ándose
-{stem}ado
-me {stem}o
-te {stem}as
-se {stem}a
-nos {stem}amos
-os {stem}áis
-se {stem}an
-
-me {stem}aba
-te {stem}abas
-se {stem}aba
-nos {stem}ábamos
-os {stem}abais
-se {stem}aban
-
-me {stem}uve
-te {stem}uviste
-se {stem}uvo
-nos {stem}uvimos
-os {stem}uvisteis
-se {stem}uvieron
-
-me {stem}aré
-te {stem}arás
-se {stem}ará
-nos {stem}aremos
-os {stem}aréis
-se {stem}arán
-
-me {stem}aría
-te {stem}arías
-se {stem}aría
-nos {stem}aríamos
-os {stem}aríais
-se {stem}arían
-
-me {stem}e
-te {stem}es
-se {stem}e
-nos {stem}emos
-os {stem}éis
-se {stem}en
-
-me {stem}uviera
-te {stem}uvieras
-se {stem}uviera
-nos {stem}uviéramos
-os {stem}uvierais
-se {stem}uvieran
-
-me {stem}uviese
-te {stem}uvieses
-se {stem}uviese
-nos {stem}uviésemos
-os {stem}uvieseis
-se {stem}uviesen
-
-me {stem}uviere
-te {stem}uvieres
-se {stem}uviere
-nos {stem}uviéremos
-os {stem}uviereis
-se {stem}uvieren
-
-{ref_stem}ate
-{ref_stem}ese
-{stem}émonos
-{stem}aos
-{ref_stem}ense""".replace('\n\n', '\n').format(stem=stem, ref_stem=ref_stem)
+        template = templates['es_conj_ar_andar_ref_stem']
     else:
-        s = """{stem}ar
-{stem}ando
-{stem}ado
+        template = templates['es_conj_ar_andar']
 
-{stem}o
-{stem}as
-{stem}a
-{stem}amos
-{stem}áis
-{stem}an
+    return es_conj(template_string_to_list(template, stem=stem, ref_stem=ref_stem))
 
-{stem}aba
-{stem}abas
-{stem}aba
-{stem}ábamos
-{stem}abais
-{stem}aban
 
-{stem}uve
-{stem}uviste
-{stem}uvo
-{stem}uvimos
-{stem}uvisteis
-{stem}uvieron
+def pprint(output):
+    for description, word in output.items():
+        print("{description}: {word}".format(description=description, word=word))
 
-{stem}aré
-{stem}arás
-{stem}ará
-{stem}aremos
-{stem}aréis
-{stem}arán
 
-{stem}aría
-{stem}arías
-{stem}aría
-{stem}aríamos
-{stem}aríais
-{stem}arían
+def CHA(template, *args, **kwargs):
+    template = templates[template]
+    return es_conj(template_string_to_list(template, *args, **kwargs))
 
-{stem}e
-{stem}es
-{stem}e
-{stem}emos
-{stem}éis
-{stem}en
-
-{stem}uviera
-{stem}uvieras
-{stem}uviera
-{stem}uviéramos
-{stem}uvierais
-{stem}uvieran
-
-{stem}uviese
-{stem}uvieses
-{stem}uviese
-{stem}uviésemos
-{stem}uvieseis
-{stem}uviesen
-
-{stem}uviere
-{stem}uvieres
-{stem}uviere
-{stem}uviéremos
-{stem}uviereis
-{stem}uvieren
-
-{stem}a
-{stem}e
-{stem}emos
-{stem}ad
-{stem}en""".replace('\n\n', '\n').format(stem=stem, ref_stem=ref_stem)
-
-    # call= [
-
-    # ]
-    # print len(tuple(s.split("\n")))
-    t = s.split("\n")
-    es_conj(t)
-
-es_conj_ar_andar('and')
+# pprint(CHA('es-conj-ar (errar)', ''))
+# pprint(CHA('es-conj-ar (andar)', 'and'))
+# pprint(CHA('es-conj-ar (andar) ref_stem', 'and', ref_stem='and'))  # fake verb, can't find a sample
+# pprint(CHA('es-conj-ar', 'abacor'))
+pprint(CHA('es-conj-ar (e-ie)', 'ac', 'rt'))
+pprint(CHA('es-conj-ar (e-ie) ref_obj', 'AAA', 'BBB'))
+# pprint(CHA('es-conj-ar ref_stem', 'ababill', ref_stem='ababíll'))
+# pprint(es_conj_ar_andar('and'))
+# pprint(es_conj_ar_errar('ab'))

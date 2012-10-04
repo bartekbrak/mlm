@@ -1,0 +1,27 @@
+* paste templates with python formatting, into a wiki page, like this:
+'es-conj-ar-imp': """{{es-conj-ar-imp}}""",
+'es-conj-ar (e-ie)': """{{es-conj-ar (e-ie)}}""",
+'es-conj-ar (go-güe)': """{{es-conj-ar (go-güe)}}""",
+* run page with ?action=render
+* save and pares using the following
+egrep -o "(<div style=\"color:#aaa\">.+</div>|<td( colspan=\"5\")*>.+</td>|'.*?': \"\"\"|\"\"\"[,]*)" render_test.html | sed -f parse.sed | sed -e ':a;N;$!ba;s,\n""",""",g' | sed -e ':a;N;$!ba;s,"""\n,\n""",g' | tr 12 01 > finl.txt
+
+explained:
+-o
+    only display matching lines
+<div style=\"color:#aaa\">.+</div>
+    include gray-coloured incorrect forms of defective verbs
+<td( colspan=\"5\")*>.+</td>
+    this is vere the derivatives are, optional colspan=5 is for infinitive, gerund and past participle formatting
+'.*?': \"\"\"
+    don't strip python begging-of-string formatting
+\"\"\"[,]*
+    simiiarly, don't strip endings, comma optional as the last one doesn't need it
+sed -f parse.sed
+    parse with sed using script file, more info therein
+':a;N;$!ba;s,\n""",""",g'
+    \n""" --> """, nicer python formatting, the rubbish at the beginning is a trick for newlines
+':a;N;$!ba;s,"""\n,\n""",g'
+    """\n -> \n""", as above, the assumption is that template string should start at the beginning of line and not contain unnecessary newlines
+tr 12 01
+    translate 1-abismal wiktionary's 1-indexing into 0-indexing

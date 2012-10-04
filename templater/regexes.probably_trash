@@ -1,0 +1,30 @@
+\{\{\{(\d)\}\}\}
+    {\1}
+[\[\]]
+\n\|\}((?!""").|\n)+
+: """((?!\{\|).|\n)+\{
+    : """
+\|-\n
+! colspan="3" style="background:#e2e4c0" | infinitive
+! colspan="3" style="background:#[0-9a-fxA-FX]{3,6}" \| (infinitive|gerund|past participle)\n
+! style="background:#ECECEC;width:12.5%" \| .*\n
+\| style="background:#F9F9F9;text-align:center;width:100%".*\n
+! style="height:3em;background:#[0-9a-fxA-FX]{3,6}" \|.*\n
+.*rowspan.*\n
+.*colspan="[^5]".*\n
+\| colspan="5" \|
+! style="background:#[0-9a-fxA-FX]{3,6}" \| \d<sup>\w{2}</sup> person.*\n
+! style="background:#ECECEC" \|.*\n
+\n\|
+    \n
+<div style="color:#aaa">(.*)</div>
+    \1
+<span class="Latn " lang="es">(.*?)\|(.*?)</span>
+    \2
+no  \{
+    no {
+\|\n
+[,]* ''or''\s*
+    ,
+\n
+    \n
