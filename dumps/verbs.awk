@@ -6,7 +6,7 @@ BEGIN {
     flush="";
     code="es"
     #verbhead="\\{\\{"code"-conjline";
-    verbhead="\\{\\{es-conjline";
+    verbhead="\\{\\{es-conj-er \\(o-hue\\)";
 }
 /\x3Ctitle/ {
     #print flush
