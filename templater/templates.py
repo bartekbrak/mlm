@@ -74,151 +74,79 @@ templates = {
 {0}erremos
 {0}errad
 {0}yerren, {0}erren""",
-    'es-conj-ar (andar) ref_stem':
-"""{0}arse
-{0}ándose
-{0}ado
-me {0}o
-te {0}as
-se {0}a
-nos {0}amos
-os {0}áis
-se {0}an
-
-me {0}aba
-te {0}abas
-se {0}aba
-nos {0}ábamos
-os {0}abais
-se {0}aban
-
-me {0}uve
-te {0}uviste
-se {0}uvo
-nos {0}uvimos
-os {0}uvisteis
-se {0}uvieron
-
-me {0}aré
-te {0}arás
-se {0}ará
-nos {0}aremos
-os {0}aréis
-se {0}arán
-
-me {0}aría
-te {0}arías
-se {0}aría
-nos {0}aríamos
-os {0}aríais
-se {0}arían
-
-me {0}e
-te {0}es
-se {0}e
-nos {0}emos
-os {0}éis
-se {0}en
-
-me {0}uviera
-te {0}uvieras
-se {0}uviera
-nos {0}uviéramos
-os {0}uvierais
-se {0}uvieran
-
-me {0}uviese
-te {0}uvieses
-se {0}uviese
-nos {0}uviésemos
-os {0}uvieseis
-se {0}uviesen
-
-me {0}uviere
-te {0}uvieres
-se {0}uviere
-nos {0}uviéremos
-os {0}uviereis
-se {0}uvieren
-
-{ref_stem}ate
-{ref_stem}ese
-{0}émonos
-{0}aos
-{ref_stem}ense""",
     'es-conj-ar (andar)':
-"""{0}ar
-{0}ando
+"""{0}ar(ref_stem?se:)
+{0}(ref_stem?ándose:ando)
 {0}ado
 
-{0}o
-{0}as
-{0}a
-{0}amos
-{0}áis
-{0}an
+(ref_stem?me :){0}o
+(ref_stem?te :){0}as
+(ref_stem?se :){0}a
+(ref_stem?nos :){0}amos
+(ref_stem?os :){0}áis
+(ref_stem?me :){0}an
 
-{0}aba
-{0}abas
-{0}aba
-{0}ábamos
-{0}abais
-{0}aban
+(ref_stem?me :){0}aba
+(ref_stem?te :){0}abas
+(ref_stem?se :){0}aba
+(ref_stem?nos :){0}ábamos
+(ref_stem?os :){0}abais
+(ref_stem?me :){0}aban
 
-{0}uve
-{0}uviste
-{0}uvo
-{0}uvimos
-{0}uvisteis
-{0}uvieron
+(ref_stem?me :){0}uve
+(ref_stem?te :){0}uviste
+(ref_stem?se :){0}uvo
+(ref_stem?nos :){0}uvimos
+(ref_stem?os :){0}uvisteis
+(ref_stem?me :){0}uvieron
 
-{0}aré
-{0}arás
-{0}ará
-{0}aremos
-{0}aréis
-{0}arán
+(ref_stem?me :){0}aré
+(ref_stem?te :){0}arás
+(ref_stem?se :){0}ará
+(ref_stem?nos :){0}aremos
+(ref_stem?os :){0}aréis
+(ref_stem?me :){0}arán
 
-{0}aría
-{0}arías
-{0}aría
-{0}aríamos
-{0}aríais
-{0}arían
+(ref_stem?me :){0}aría
+(ref_stem?te :){0}arías
+(ref_stem?se :){0}aría
+(ref_stem?nos :){0}aríamos
+(ref_stem?os :){0}aríais
+(ref_stem?me :){0}arían
 
-{0}e
-{0}es
-{0}e
-{0}emos
-{0}éis
-{0}en
+(ref_stem?me :){0}e
+(ref_stem?te :){0}es
+(ref_stem?se :){0}e
+(ref_stem?nos :){0}emos
+(ref_stem?os :){0}éis
+(ref_stem?me :){0}en
 
-{0}uviera
-{0}uvieras
-{0}uviera
-{0}uviéramos
-{0}uvierais
-{0}uvieran
+(ref_stem?me :){0}uviera
+(ref_stem?te :){0}uvieras
+(ref_stem?se :){0}uviera
+(ref_stem?nos :){0}uviéramos
+(ref_stem?os :){0}uvierais
+(ref_stem?me :){0}uvieran
 
-{0}uviese
-{0}uvieses
-{0}uviese
-{0}uviésemos
-{0}uvieseis
-{0}uviesen
+(ref_stem?me :){0}uviese
+(ref_stem?te :){0}uvieses
+(ref_stem?se :){0}uviese
+(ref_stem?nos :){0}uviésemos
+(ref_stem?os :){0}uvieseis
+(ref_stem?me :){0}uviesen
 
-{0}uviere
-{0}uvieres
-{0}uviere
-{0}uviéremos
-{0}uviereis
-{0}uvieren
+(ref_stem?me :){0}uviere
+(ref_stem?te :){0}uvieres
+(ref_stem?se :){0}uviere
+(ref_stem?nos :){0}uviéremos
+(ref_stem?os :){0}uviereis
+(ref_stem?me :){0}uvieren
 
-{0}a
-{0}e
-{0}emos
-{0}ad
-{0}en""",
+(ref_stem?{ref_stem}ate:{0}a)
+(ref_stem?{ref_stem}ese:{0}e)
+{0}(ref_stem?émonos:emos)
+{0}(ref_stem?aos:ad)
+(ref_stem?{ref_stem}ense:{0}en)""",
     'es-conj-ar':
 """{0}ar
 {0}ando
