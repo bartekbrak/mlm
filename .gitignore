@@ -1,2 +1,3 @@
 ./dumps/enwiktionary-*-pages-articles.xml*
 *pyc
+local_settings.py
