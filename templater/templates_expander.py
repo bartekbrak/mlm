@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import re
 from collections import OrderedDict
 from templates import templates
+from functools import partial
 
 
 def template_string_to_list(template_string, *args, **kwargs):
@@ -41,38 +43,34 @@ def es_conj(args):
                     x += 1
     return r
 
-
-def es_conj_ar_errar(stem):
-    """'e' becomes 'ye' in stressed syllables, except in Latin America, where it is conjugated normally."""
-    template = templates['es_conj_ar_errar']
-    return es_conj(template_string_to_list(template, stem=stem,))
-
-
-def es_conj_ar_andar(stem, ref_stem=None):
-    # To use with a reflexive verb add ref_stem='accented form of verb stem' to the template call.
-    if ref_stem:
-        template = templates['es_conj_ar_andar_ref_stem']
-    else:
-        template = templates['es_conj_ar_andar']
-
-    return es_conj(template_string_to_list(template, stem=stem, ref_stem=ref_stem))
-
-
 def pprint(output):
     for description, word in output.items():
         print("{description}: {word}".format(description=description, word=word))
 
 
 def CHA(template, *args, **kwargs):
+    """arbitrary name"""
     template = templates[template]
+    template = resolve_ternaries(template, **kwargs)
     return es_conj(template_string_to_list(template, *args, **kwargs))
+
+def resolve_ternaries_helper(match, **kwargs):
+    if match.groups()[0] in kwargs:
+        return match.groups()[1]
+    else:
+        return match.groups()[2]
+
+def resolve_ternaries(template, **kwargs):
+    """format: (pseudo_test?val_if_true:val_if_false)"""
+    m = re.compile('\((.*)\?(.*):(.*)\)')
+    # m = re.compile('\{\{#if: \{\{\{(.*)\|\}\}\}\|(.*)\|(.*)\}\}')
+    return m.sub(partial(resolve_ternaries_helper, **kwargs), template)
 
 # pprint(CHA('es-conj-ar (errar)', ''))
 # pprint(CHA('es-conj-ar (andar)', 'and'))
-# pprint(CHA('es-conj-ar (andar) ref_stem', 'and', ref_stem='and'))  # fake verb, can't find a sample
+# pprint(CHA('es-conj-ar (andar)', 'and', ref_stem='and'))  # fake verb, can't find a sample
+pprint(CHA('es-conj-ar', 'abland', ref_stem='ablánd'))
 # pprint(CHA('es-conj-ar', 'abacor'))
-pprint(CHA('es-conj-ar (e-ie)', 'ac', 'rt'))
-pprint(CHA('es-conj-ar (e-ie) ref_obj', 'AAA', 'BBB'))
+# pprint(CHA('es-conj-ar (e-ie)', 'ac', 'rt'))
+# pprint(CHA('es-conj-ar (e-ie) ref_obj', 'AAA', 'BBB'))
 # pprint(CHA('es-conj-ar ref_stem', 'ababill', ref_stem='ababíll'))
-# pprint(es_conj_ar_andar('and'))
-# pprint(es_conj_ar_errar('ab'))
