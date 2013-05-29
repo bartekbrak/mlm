@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-# what is this for, leave description, fuck, i really don't know :), viva los comments
+# convert dict-formatted wiktionary extraction to tab-separated,
+# inflections-enriched mlm-format
 import sys
 from time import gmtime, strftime
 
@@ -12,7 +13,7 @@ if len(sys.argv) != 3:
 now = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 print "000_description\t\tfrom %s %s on %s" % (sys.argv[1], sys.argv[1], now)
 
-# conjugation
+# inflections
 derivatives_dictionary = {}
 for line in open(sys.argv[2]):
     # strip unimportant
@@ -45,10 +46,9 @@ for line in open(sys.argv[1]):
             wiktionary[lemma][pos] = wiktionary[lemma][pos] + '; ' + meaning
         else:
             wiktionary[lemma].update({pos: meaning})
-            pass
     else:
         wiktionary[lemma] = {pos: meaning}
-# import ipdb; ipdb.set_trace()
+
 for lemma in wiktionary.keys():
     # lemma, pos, meaning = line.split('\t')
     # root = str.split(line, ' {')[0]
