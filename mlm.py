@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from Tkinter import *
 import sys
+try: import Tkinter
+except: sys.exit('Install tkInter: sudo apt-get install python-tk')
 try: from evdev import InputDevice, ecodes, list_devices
 except: sys.exit('Install evdev <sudo pip install git+git://github.com/gvalkov/python-evdev.git>\n    sudo pip install git+git://github.com/gvalkov/python-evdev.git\n')
 from select import select
@@ -151,10 +152,10 @@ class MyTkApp(threading.Thread):
     def run(self):
         self.oldwhat = 'init'
 
-        self.root = Tk()
+        self.root = Tkinter.Tk()
         self.root.wm_title("mlm")
         self.root.geometry(GEOMETRY)
-        self.text = Text(self.root, width=40, height=ROWS)
+        self.text = Tkinter.Text(self.root, width=40, height=ROWS)
         self.text.pack()
         self.text.tag_configure('head', font='helvetica 12 bold', background='#b4e5c4')
         self.text.tag_configure('line', font='helvetica 8 bold', background='#50C878')
@@ -172,6 +173,3 @@ tk_app = MyTkApp()
 
 MouseDispatcher(dev, tk_app)
 loop()
-
-
-
